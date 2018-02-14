@@ -17,10 +17,18 @@ import rstr
 def mint(minval, maxval):
     """returns an integer in the range of maxvalue, minvalue"""
     return random.randint(maxval, minval)
+    
+def mbool():
+    return random.choice([True, False])
 
-def mfloat(minval, maxval):
+def mfloat(minval, maxval, dps=None):
     """returns a float in the range of maxvalue, minvalue"""
-    return random.uniform(maxval, minval)
+    num = random.uniform(maxval, minval)
+    if dps is not None:
+        dec_places = '.'+str(dps)+'f'
+        return float(format(num, dec_places))
+    else:
+        return num
 
 def mstring(numchars, case='lower', integers=False, punctuation=False):
     """" Generates a random string """
@@ -59,10 +67,13 @@ def mdate(mindate, maxdate):
     year = sys_random.randint(int(min_val[2]), int(max_val[2]))
     return datetime.date(year, month, day)
 
-def marray(num, funct):
-    """tranforms stuff into an array"""
-    random.seed()
-    return [funct for x in range(num)]
+def marray(num, funct, *args):
+    """creates generated data of a certain type into an Array"""
+    return [funct(*args) for x in range(num)]
+
+def mtuple(num, funct, *args):
+    """ creates generated data of a certain type into a Tuple """
+    return (funct(*args) for x in range(num))
 
 def mregex(regex):
     """
@@ -74,3 +85,10 @@ def mregex(regex):
     """
     uni_reg = rstr.xeger(regex)
     return str(uni_reg)
+
+def mipaddress():
+    """Generates a random IPv4 Ip address not seperated by locale or address"""
+    ip_regex = r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)"
+    ip_regex += r"{3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+    rand_ip = rstr.xeger(ip_regex)
+    return str(rand_ip)
